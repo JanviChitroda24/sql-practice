@@ -1,33 +1,98 @@
 # SQL Practice
 
-A collection of SQL practice problems, organized and sequentially numbered.
+Problems solved as of May 16, 2026.
 
-## Structure
+## Leetcode Questions
 
-```
-SQLPractice/
-├── README.md
-├── Leetcode_Questions/    (77 problems, #00–#76)
-└── NonLeetcode_Questions/ (8 problems, #00–#07)
-```
+| # | LC# | Problem |
+|---|-----|---------|
+| 00 | 181 | Employees Earning More Than Their Managers |
+| 01 | 185 | Department Top Three Salaries |
+| 02 | 579 | Find Cumulative Salary of an Employee |
+| 03 | 569 | Median Employee Salary |
+| 04 | 175 | Combine Two Tables |
+| 05 | 181 | Employees Earning More Than Their Managers (v2) |
+| 06 | 182 | Duplicate Emails |
+| 07 | 183 | Customers Who Never Order |
+| 08 | 196 | Delete Duplicate Emails |
+| 09 | 176 | Second Highest Salary |
+| 10 | 577 | Employee Bonus |
+| 11 | 586 | Customer Placing Largest Number of Orders |
+| 12 | 596 | Classes More Than 5 Students |
+| 13 | 607 | Sales Person |
+| 14 | 1179 | The Reformat Pivot Pattern |
+| 15 | 177 | Nth Highest Salary |
+| 16 | 178 | Rank Scores |
+| 17 | 180 | Consecutive Numbers |
+| 18 | 184 | Department Highest Salary |
+| 19 | 185 | Department Top Three Salaries (v2) |
+| 20 | 512 | Game Play Analysis II |
+| 21 | 574 | Winning Candidate |
+| 22 | 1077 | Project Employees III |
+| 23 | 1112 | Highest Grade for Each Student |
+| 24 | 1596 | Most Frequently Ordered Products for Each Customer |
+| 25 | 550 | Game Play Analysis IV |
+| 26 | 1321 | Restaurant Growth |
+| 27 | 601 | Human Traffic of Stadium |
+| 28 | 1164 | Product Price at a Given Date |
+| 29 | 1204 | Last Person to Fit in the Bus |
+| 30 | 1393 | Capital Gain/Loss |
+| 31 | 185 | Department Top Three Salaries (v3) |
+| 32 | 1341 | Movie Rating |
+| 33 | 1907 | Count Salary Categories |
+| 34 | 262 | Trips and Users |
+| 35 | 1158 | Market Analysis I |
+| 36 | 1045 | Customers Who Bought All Products |
+| 37 | 569 | Median Employee Salary (v2) |
+| 38 | 1484 | Group Sold Products by the Date |
+| 39 | 1527 | Patients with a Condition |
+| 40 | 615 | Average Salary — Departments vs Company |
+| 41 | 1699 | Number of Calls Between Two Persons |
+| 42 | 579 | Find Cumulative Salary of an Employee (v2) |
+| 43 | 1454 | Active Users |
+| 44 | 1070 | Product Sales Analysis III |
+| 45 | 1179 | Reformat Department Table |
+| 46 | 1384 | Total Sales Amount by Year |
+| 47 | 1270 | All People Report to the Given Manager |
+| 48 | 1613 | Find the Missing IDs |
+| 49 | 1225 | Report Contiguous Dates |
+| 50 | 1384 | Total Sales Amount by Year (v2) |
+| 51 | 1350 | Students with Invalid Departments |
+| 52 | 180 | Consecutive Numbers (v2) |
+| 53 | 197 | Rising Temperature |
+| 54 | 176 | Second Highest Salary (v2) |
+| 55 | 178 | Rank Scores (v2) |
+| 56 | 196 | Delete Duplicate Emails (v2) |
+| 57 | 603 | Consecutive Available Seats |
+| 58 | 1127 | User Purchase Platform |
+| 59 | 585 | Investments in 2016 |
+| 60 | 1369 | Get the Second Most Recent Activity |
+| 61 | 608 | Tree Node |
+| 62 | 1097 | Game Play Analysis V |
+| 63 | 1194 | Tournament Winners |
+| 64 | 626 | Exchange Seats |
+| 65 | 1159 | Market Analysis II |
+| 66 | 1251 | Average Selling Price |
+| 67 | 1978 | Employees Whose Manager Left the Company |
+| 68 | 1280 | Students and Examinations |
+| 69 | 1667 | Fix Names in a Table |
+| 70 | 1174 | Immediate Food Delivery II |
+| 71 | 1581 | Customer Who Visited but Did Not Make Any Transactions |
+| 72 | 1517 | Find Users with Valid Emails |
+| 73 | 1934 | Confirmation Rate |
+| 74 | 1378 | Replace Employee ID with the Unique Identifier |
+| 75 | 1965 | Employees with Missing Information |
+| 76 | 1661 | Average Time of Process per Machine |
 
-## Naming Convention
+## Non-Leetcode Questions
 
-- **Format**: `{sequence}_{leetcode_number}_{ProblemName}.sql`
-- **Sequence**: Two-digit zero-padded (`00` to `76`)
-- **ProblemName**: PascalCase, no spaces
-- **Duplicates**: Problems solved multiple times have `_v2`, `_v3` suffixes
-
-## Duplicate Problems (Revisited)
-
-| Problem | Versions |
-|---------|----------|
-| 181 — Employees Earning More Than Their Managers | #00, #05 (_v2) |
-| 185 — Department Top Three Salaries | #01, #19 (_v2), #31 (_v3) |
-| 579 — Find Cumulative Salary of an Employee | #02, #42 (_v2) |
-| 569 — Median Employee Salary | #03, #37 (_v2) |
-| 196 — Delete Duplicate Emails | #08, #56 (_v2) |
-| 176 — Second Highest Salary | #09, #54 (_v2) |
-| 178 — Rank Scores | #16, #55 (_v2) |
-| 180 — Consecutive Numbers | #17, #52 (_v2) |
-| 1384 — Total Sales Amount by Year | #46, #50 (_v2) |
+| # | Problem |
+|---|---------|
+| 00 | Game Play Analysis |
+| 01 | Sales Analysis III |
+| 02 | MSSQL Server Window Function |
+| 03 | Top 3 Users with Highest Event Count |
+| 04 | User Logged In Daily |
+| 05 | User Suspicious Activity |
+| 06 | Compute Daily Retention |
+| 07 | Earliest Event Wins |
