@@ -1,6 +1,6 @@
 # SQL Practice
 
-Problems solved as of May 16, 2026.
+Problems solved as of May 17, 2026.
 
 ## Leetcode Questions
 
@@ -83,6 +83,14 @@ Problems solved as of May 16, 2026.
 | 74 | 1378 | Replace Employee ID with the Unique Identifier |
 | 75 | 1965 | Employees with Missing Information |
 | 76 | 1661 | Average Time of Process per Machine |
+| 77 | 1355 | Activity Participants |
+| 78 | 1205 | Monthly Transactions II |
+
+## PracticeAgain
+
+| # | LC# | Problem |
+|---|-----|---------|
+| 00 | 181 | Employees Earning More Than Their Managers |
 
 ## Non-Leetcode Questions
 
@@ -96,3 +104,24 @@ Problems solved as of May 16, 2026.
 | 05 | User Suspicious Activity |
 | 06 | Compute Daily Retention |
 | 07 | Earliest Event Wins |
+
+
+Next questions to solve:
+1479
+1651
+571
+1635
+1532
+1412
+618
+1917
+1126
+1468
+1892
+1555
+1364
+1149
+1212
+1831
+1308
+1645
