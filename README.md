@@ -1,6 +1,6 @@
 # SQL Practice
 
-Problems solved as of May 17, 2026.
+Problems solved as of May 18, 2026.
 
 ## Leetcode Questions
 
@@ -85,12 +85,17 @@ Problems solved as of May 17, 2026.
 | 76 | 1661 | Average Time of Process per Machine |
 | 77 | 1355 | Activity Participants |
 | 78 | 1205 | Monthly Transactions II |
+| 79 | 1479 | Sales by Day of the Week |
+| 80 | 1651 | Hopper Company Queries III |
+| 81 | 571 | Find Median Given Frequency of Numbers |
+| 82 | 1635 | Hopper Company Queries I |
 
 ## PracticeAgain
 
 | # | LC# | Problem |
 |---|-----|---------|
 | 00 | 181 | Employees Earning More Than Their Managers |
+| 01 | 185 | Department Top Three Salaries |
 
 ## Non-Leetcode Questions
 
@@ -107,10 +112,6 @@ Problems solved as of May 17, 2026.
 
 
 Next questions to solve:
-1479
-1651
-571
-1635
 1532
 1412
 618
