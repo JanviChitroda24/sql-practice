@@ -1,6 +1,6 @@
 # SQL Practice
 
-Problems solved as of May 18, 2026.
+Problems solved as of May 19, 2026.
 
 ## Leetcode Questions
 
@@ -89,6 +89,9 @@ Problems solved as of May 18, 2026.
 | 80 | 1651 | Hopper Company Queries III |
 | 81 | 571 | Find Median Given Frequency of Numbers |
 | 82 | 1635 | Hopper Company Queries I |
+| 83 | 1532 | The Most Recent Three Orders |
+| 84 | 1412 | Find the Quiet Students in All Exams |
+| 85 | 618 | Students Report By Geography |
 
 ## PracticeAgain
 
@@ -96,6 +99,8 @@ Problems solved as of May 18, 2026.
 |---|-----|---------|
 | 00 | 181 | Employees Earning More Than Their Managers |
 | 01 | 185 | Department Top Three Salaries |
+| 02 | 579 | Find Cumulative Salary of an Employee |
+| 03 | 569 | Median Employee Salary |
 
 ## Non-Leetcode Questions
 
@@ -112,9 +117,6 @@ Problems solved as of May 18, 2026.
 
 
 Next questions to solve:
-1532
-1412
-618
 1917
 1126
 1468
