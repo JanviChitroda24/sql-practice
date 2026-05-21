@@ -92,6 +92,7 @@ Problems solved as of May 19, 2026.
 | 83 | 1532 | The Most Recent Three Orders |
 | 84 | 1412 | Find the Quiet Students in All Exams |
 | 85 | 618 | Students Report By Geography |
+| 86 | 1917 | Leetcodify Friends Recommendations |
 
 ## PracticeAgain
 
@@ -101,6 +102,10 @@ Problems solved as of May 19, 2026.
 | 01 | 185 | Department Top Three Salaries |
 | 02 | 579 | Find Cumulative Salary of an Employee |
 | 03 | 569 | Median Employee Salary |
+| 04 | 175 | Combine Two Tables |
+| 06 | 182 | Duplicate Emails |
+| 07 | 183 | Customers Who Never Order |
+| 08 | 196 | Delete Duplicate Emails |
 
 ## Non-Leetcode Questions
 
@@ -117,7 +122,6 @@ Problems solved as of May 19, 2026.
 
 
 Next questions to solve:
-1917
 1126
 1468
 1892
