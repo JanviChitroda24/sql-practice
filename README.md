@@ -93,6 +93,8 @@ Problems solved as of May 19, 2026.
 | 84 | 1412 | Find the Quiet Students in All Exams |
 | 85 | 618 | Students Report By Geography |
 | 86 | 1917 | Leetcodify Friends Recommendations |
+| 87 | 1126 | Active Businesses |
+| 88 | 1468 | Calculate Salaries |
 
 ## PracticeAgain
 
@@ -106,6 +108,7 @@ Problems solved as of May 19, 2026.
 | 06 | 182 | Duplicate Emails |
 | 07 | 183 | Customers Who Never Order |
 | 08 | 196 | Delete Duplicate Emails |
+| 09 | 176 | Second Highest Salary |
 
 ## Non-Leetcode Questions
 
@@ -122,8 +125,6 @@ Problems solved as of May 19, 2026.
 
 
 Next questions to solve:
-1126
-1468
 1892
 1555
 1364
