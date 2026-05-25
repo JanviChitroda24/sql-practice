@@ -1,6 +1,6 @@
 # SQL Practice
 
-Problems solved as of May 19, 2026.
+Problems solved as of May 24, 2026.
 
 ## Leetcode Questions
 
@@ -95,6 +95,10 @@ Problems solved as of May 19, 2026.
 | 86 | 1917 | Leetcodify Friends Recommendations |
 | 87 | 1126 | Active Businesses |
 | 88 | 1468 | Calculate Salaries |
+| 89 | 1892 | Page Recommendations II |
+| 90 | 1555 | Bank Account Summary |
+| 91 | 1364 | Number of Trusted Contacts of a Customer |
+| 92 | 1149 | Article Views II |
 
 ## PracticeAgain
 
@@ -125,10 +129,6 @@ Problems solved as of May 19, 2026.
 
 
 Next questions to solve:
-1892
-1555
-1364
-1149
 1212
 1831
 1308
