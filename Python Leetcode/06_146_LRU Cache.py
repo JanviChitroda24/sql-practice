@@ -110,15 +110,20 @@ class LRUCache:
             return -1
         else:
             node = self.cache[key]
-            _remove(node)
-            _add(node)
+            self._remove(node)
+            self._add(node)
             return node.val
 
     def put(self, key: int, value: int) -> None:
-        
-
-
-# Your LRUCache object will be instantiated and called as such:
-# obj = LRUCache(capacity)
-# param_1 = obj.get(key)
-# obj.put(key,value)
+        if key in self.cache:
+            node = self.cache[key]
+            node.val = value
+            self._remove(node)
+            self._add(node)
+        else:
+            node = Node(key, value)
+            if len(self.cache) >= self.capacity:
+                del self.cache[self.tail.prev.key]
+                self._remove(self.tail.prev)
+            self.cache[key] = node
+            self._add(node)
