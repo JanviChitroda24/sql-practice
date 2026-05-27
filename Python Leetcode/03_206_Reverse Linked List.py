@@ -77,9 +77,9 @@ Try coding it. Start with `prev = None`, `curr = head`, loop while `curr is not 
     
 class Solution:
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        curr = head
         prev = None
-        while curr.next is not None:
+        curr = head
+        while curr is not None:
             nxt = curr.next
             curr.next = prev
             prev = curr

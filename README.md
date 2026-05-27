@@ -1,6 +1,6 @@
 # SQL Practice
 
-Problems solved as of May 24, 2026.
+Problems solved as of May 25, 2026.
 
 ## Leetcode Questions
 
@@ -99,6 +99,10 @@ Problems solved as of May 24, 2026.
 | 90 | 1555 | Bank Account Summary |
 | 91 | 1364 | Number of Trusted Contacts of a Customer |
 | 92 | 1149 | Article Views II |
+| 93 | 1212 | Team Scores in Football Tournament |
+| 94 | 1831 | Maximum Transaction Each Day |
+| 95 | 1308 | Running Total for Different Genders |
+| 96 | 1645 | Hopper Company Queries II |
 
 ## PracticeAgain
 
@@ -126,10 +130,3 @@ Problems solved as of May 24, 2026.
 | 05 | User Suspicious Activity |
 | 06 | Compute Daily Retention |
 | 07 | Earliest Event Wins |
-
-
-Next questions to solve:
-1212
-1831
-1308
-1645
