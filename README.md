@@ -1,6 +1,6 @@
 # SQL Practice
 
-Problems solved as of May 25, 2026.
+Problems solved as of May 29, 2026.
 
 ## Leetcode Questions
 
@@ -103,6 +103,9 @@ Problems solved as of May 25, 2026.
 | 94 | 1831 | Maximum Transaction Each Day |
 | 95 | 1308 | Running Total for Different Genders |
 | 96 | 1645 | Hopper Company Queries II |
+| 97 | 1767 | Find the Subtasks That Did Not Execute |
+| 98 | 1285 | Find the Start and End Number of Continuous Ranges |
+| 99 | 1811 | Find Interview Candidates |
 
 ## PracticeAgain
 
