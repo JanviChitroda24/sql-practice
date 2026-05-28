@@ -102,3 +102,31 @@ WHERE NOT EXISTS (
     WHERE s.task_id = e.task_id 
         AND s.subtask_id = e.subtask_id 
 );
+
+For this specific problem (small data, `subtasks_count <= 20`), 
+    all three perform nearly identically. But here's how they differ in general:
+
+**LEFT JOIN + WHERE NULL** — 
+    The join builds a combined result set, then filters out matches. 
+    On large datasets this can use more memory since it materializes the full join before filtering. 
+    However, most modern optimizers recognize this pattern and convert it internally to an anti-join, 
+        making it equivalent to NOT EXISTS.
+
+**NOT EXISTS** — 
+    Evaluates the subquery per row and short-circuits as soon as it finds a match (stops scanning early). 
+    This makes it slightly better when the `Executed` table is large and matches are found quickly. 
+    It also handles NULLs safely, unlike NOT IN.
+
+**NOT IN** — 
+    The subquery runs once and builds a list, then each row is checked against it. 
+    The major downside: if any value in the subquery result is NULL, 
+    the entire NOT IN evaluates to UNKNOWN and returns zero rows — a silent, hard-to-debug failure. 
+    Performance-wise, for large subquery results, the lookup list can get expensive.
+
+**Practical ranking for interviews:**
+
+1. **NOT EXISTS** — safest, NULL-proof, short-circuits, universally recommended
+2. **LEFT JOIN + WHERE NULL** — equally safe, most readable, often optimizer-equivalent to NOT EXISTS
+3. **NOT IN** — works fine when you're certain there are no NULLs, but risky as a default habit
+
+For this problem specifically, it genuinely doesn't matter — pick whichever you're most comfortable explaining.
