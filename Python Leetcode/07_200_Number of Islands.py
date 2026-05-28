@@ -118,3 +118,26 @@ class Solution:
 #     If the interviewer asks "what could go wrong?", mention that, 
 #         and say you could convert to iterative DFS using a stack or use BFS with a queue. 
 #     You don't need to code both — just knowing the tradeoff shows maturity.
+
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        def dfs(grid, row, col):
+            # check bounds and if cell is water
+            if (row>=0 and row<len(grid))  and (col>=0 and col<len(grid[0]))  and grid[row][col]=='1':
+                # mark as visited
+                grid[row][col]='0'
+
+                # explore four neighbors
+                dfs(grid, row-1, col)
+                dfs(grid, row+1, col)
+                dfs(grid, row, col-1)
+                dfs(grid, row, col+1)
+        
+        island_cnt = 0
+        for row in range(len(grid)):
+            for col in range(len(grid[0])):
+                if grid[row][col] == '1':
+                    dfs(grid, row, col)
+                    island_cnt += 1
+        
+        return island_cnt
