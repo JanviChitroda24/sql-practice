@@ -106,6 +106,7 @@ Problems solved as of May 29, 2026.
 | 97 | 1767 | Find the Subtasks That Did Not Execute |
 | 98 | 1285 | Find the Start and End Number of Continuous Ranges |
 | 99 | 1811 | Find Interview Candidates |
+| 100 | 2494 | Merge Overlapping Events in the Same Hall |
 
 ## PracticeAgain
 
