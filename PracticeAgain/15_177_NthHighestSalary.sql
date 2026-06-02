@@ -61,19 +61,13 @@ BEGIN
   RETURN (
       WITH sal_rank AS (
         SELECT salary, 
-            DENSE_RANK() OVER(ORDER BY salary DESC) AS sal_rnk,
-            COUNT(salary) AS sal_cnt
+            DENSE_RANK() OVER(ORDER BY salary DESC) AS sal_rnk
         FROM Employee
         GROUP BY salary
     )
-    SELECT 
-        CASE
-        WHEN N = sal_cnt
-        THEN salary
-        ELSE 
-            NULL
-        END AS getNthHighestSalary
+    SELECT salary
     FROM sal_rank
+    WHERE sal_rnk = N
   );
 END
 
