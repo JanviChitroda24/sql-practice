@@ -1,6 +1,6 @@
 # SQL Practice
 
-Problems solved as of May 29, 2026.
+Problems solved as of June 2, 2026.
 
 ## Leetcode Questions
 
@@ -121,6 +121,14 @@ Problems solved as of May 29, 2026.
 | 07 | 183 | Customers Who Never Order |
 | 08 | 196 | Delete Duplicate Emails |
 | 09 | 176 | Second Highest Salary |
+| 10 | 577 | Employee Bonus |
+| 11 | 586 | Customer Placing Largest Number of Orders |
+| 12 | 596 | Classes More Than 5 Students |
+| 13 | 607 | Sales Person |
+| 14 | 1179 | The Reformat Pivot Pattern |
+| 15 | 177 | Nth Highest Salary |
+| 16 | 178 | Rank Scores |
+| 18 | 184 | Department Highest Salary |
 
 ## Non-Leetcode Questions
 
