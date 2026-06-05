@@ -60,35 +60,12 @@ Result table:
 Both employees with id 1 and 3 have the most experience among the employees of the first project. For the second project, the employee with id 1 has the most experience.
 """
 
-WITH emp_exp_rank AS (
-	SELECT p.project_id, p.employee_id,
-		DENSE_RANK() OVER(PARTITION BY p.project_id ORDER BY e.experience_years DESC) AS exp_rank
+WITH emp_exp AS (
+	SELECT p.project_id, p.employee_id, 
+		DENSE_RANK() OVER(PARTITION BY p.project_id ORDER BY e.experience_years DESC) AS exp_ranking
 	FROM Project p JOIN Employee e 
 		ON p.employee_id = e.employee_id
 )
 SELECT project_id, employee_id
-FROM emp_exp_rank
-WHERE exp_rank = 1;
-
--- optimized:
-SELECT p.project_id, e.employee_id
-FROM Project p JOIN Employee e
-		ON e.employee_id = p.employee_id
-WHERE (p.project_id, e.experience_years) IN (
-	SELECT p.project_id,  MAX(e.experience_years) AS max_exp_years
-	FROM Project p JOIN Employee e 
-		ON p.employee_id = e.employee_id
-	GROUP BY p.project_id
-);
-
-WITH emp_max_exp AS (
-	SELECT p.project_id,  MAX(e.experience_years) AS max_exp_years
-	FROM Project p JOIN Employee e 
-		ON p.employee_id = e.employee_id
-	GROUP BY p.project_id
-)
-SELECT p.project_id, e.employee_id
-FROM emp_max_exp ep JOIN Project p
-		ON ep.project_id = p.project_id
-	JOIN Employee e
-		ON p.employee_id = e.employee_id AND ep.max_exp_years = e.experience_years;
+FROM emp_exp
+WHERE exp_ranking = 1;
