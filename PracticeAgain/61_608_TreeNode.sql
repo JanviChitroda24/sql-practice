@@ -96,3 +96,42 @@ FROM Tree t1 LEFT JOIN Tree t2
 --     It's only the multi-child rows that expose the bug, 
 --         which is exactly why it's easy to miss during a quick self-check.
 
+
+-- Let's build it step by step so you can see exactly what the raw `LEFT JOIN` produces, 
+    -- before any `CASE` or `DISTINCT` touches it.
+
+-- **The data:**
+-- ```
+-- Tree:
+-- id | p_id
+-- 1  | null
+-- 2  | 1
+-- 3  | 1
+-- 4  | 2
+-- 5  | 2
+-- ```
+
+-- **The join:** `FROM Tree t1 LEFT JOIN Tree t2 ON t1.id = t2.p_id`
+
+-- For every row in `t1`, MySQL looks for **every** row in `t2` whose `p_id` matches `t1.id`. If there are multiple matches, you get multiple output rows — one per match. If there are zero matches, `LEFT JOIN` still keeps `t1`'s row, but fills all of `t2`'s columns with `NULL`.
+
+-- Here's the raw result, row by row:
+
+-- | t1.id | t1.p_id | t2.id | t2.p_id | why |
+-- |---|---|---|---|---|
+-- | 1 | null | 2 | 1 | t2 row (id=2,p_id=1) matches, since p_id=1=t1.id |
+-- | 1 | null | 3 | 1 | t2 row (id=3,p_id=1) *also* matches — same t1.id, second match |
+-- | 2 | 1 | 4 | 2 | t2 row (id=4,p_id=2) matches |
+-- | 2 | 1 | 5 | 2 | t2 row (id=5,p_id=2) *also* matches — second match again |
+-- | 3 | 1 | null | null | nothing in Tree has p_id=3, so no match → LEFT JOIN fills nulls |
+-- | 4 | 2 | null | null | nothing has p_id=4 → no match |
+-- | 5 | 2 | null | null | nothing has p_id=5 → no match |
+
+-- **That's 7 rows total** — even though the original table only has 5 rows. Notice:
+-- - `t1.id=1` appears **twice** (rows 1 and 2), because node 1 has two children (2 and 3), so it gets matched twice.
+-- - `t1.id=2` appears **twice** (rows 3 and 4), same reason — node 2 has two children (4 and 5).
+-- - `t1.id=3,4,5` each appear **once**, because they have zero children — `LEFT JOIN` still keeps them (that's the whole point of `LEFT` vs `INNER`), just with `t2` columns as `NULL`.
+
+-- Now when you apply your `CASE` to each of these 7 rows, `t1.id=1` computes `'Root'` twice (once per row) and `t1.id=2` computes `'Inner'` twice — that's exactly where your duplicates were coming from. `DISTINCT` then looks at the final `(id, type)` pairs and collapses `(1,Root)+(1,Root)` into a single `(1,Root)`, and same for `(2,Inner)`.
+
+-- Does seeing the actual 7-row intermediate table make the fan-out clearer?
