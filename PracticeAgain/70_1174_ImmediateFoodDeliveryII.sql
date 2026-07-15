@@ -113,3 +113,11 @@ WHERE (customer_id, order_date) IN (
 --             — it performs consistently regardless of indexing, 
 --             which makes it the safer default to lead with in an interview 
 --             unless you know the schema is indexed the way you need.
+
+
+
+-- The window version is less sensitive to whether a specific composite index exists 
+--     (it degrades to "needs a sort" without one, rather than "needs a full scan" 
+--     — both versions get worse without any index, just differently), 
+--     while the IN version has more upside if that specific index is present, 
+--     due to the row-skipping trick that window functions structurally can't replicate.
