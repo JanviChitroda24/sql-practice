@@ -1,15 +1,15 @@
-You have a table called daily_sales:
+-- You have a table called daily_sales:
 
-daily_sales
-├── product_id     INT
-├── sale_date      DATE
-├── units_sold     INT
-├── revenue        DECIMAL(12,2)
+-- daily_sales
+-- ├── product_id     INT
+-- ├── sale_date      DATE
+-- ├── units_sold     INT
+-- ├── revenue        DECIMAL(12,2)
 
-One row per product per day. 
-Find all products that had 3 or more consecutive months of declining revenue. 
-A month's revenue is the total revenue for that product in that calendar month. 
-Return product_id, decline_start_month, decline_end_month, and consecutive_decline_months.
+-- One row per product per day. 
+-- Find all products that had 3 or more consecutive months of declining revenue. 
+-- A month's revenue is the total revenue for that product in that calendar month. 
+-- Return product_id, decline_start_month, decline_end_month, and consecutive_decline_months.
 
 WITH sale_date_group AS (
     SELECT product_id, revenue,
