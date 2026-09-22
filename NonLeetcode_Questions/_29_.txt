@@ -1,0 +1,47 @@
+Q29
+
+An interviewer shows you this query and asks "What's wrong with it and how would you optimize it?"
+
+sql
+SELECT c.customer_name, 
+    (SELECT SUM(o.amount) FROM orders o WHERE o.customer_id = c.customer_id) AS total_spend,
+    (SELECT COUNT(*) FROM orders o WHERE o.customer_id = c.customer_id) AS order_count,
+    (SELECT MAX(o.order_date) FROM orders o WHERE o.customer_id = c.customer_id) AS last_order
+FROM customers c
+WHERE (SELECT SUM(o.amount) FROM orders o WHERE o.customer_id = c.customer_id) > 1000
+ORDER BY (SELECT SUM(o.amount) FROM orders o WHERE o.customer_id = c.customer_id) DESC;
+
+Tell me: what are the problems with this query, and write the optimized version.
+
+SELECT c.customer_name, 
+    SUM(o.amount) AS total_spend,
+    COUNT(*) AS order_count,
+    MAX(o.order_date) AS last_order
+FROM customers c JOIN orders o
+    ON c.customer_id = o.customer_id
+GROUP BY c.customer_name
+HAVING SUM(o.amount) > 1000
+ORDER BY SUM(o.amount) DESC;
+
+
+
+Actually, the original query is syntactically valid 
+    — correlated subqueries in SELECT, WHERE, and ORDER BY all work in MySQL. 
+It would run and return correct results. 
+The problem isn't correctness, it's performance.
+
+Here's what you'd tell the interviewer:
+
+The problem is efficiency. 
+    That same correlated subquery:
+        SELECT SUM(o.amount) FROM orders WHERE customer_id = c.customer_id runs 5 separate times 
+        — three in SELECT, once in WHERE, once in ORDER BY. 
+    Each one scans the orders table for every single customer. 
+    If you have 10,000 customers, that's 50,000 subquery executions.
+
+Your optimized version joins once, aggregates once, and uses HAVING and ORDER BY on the already-computed aggregate. 
+One table scan instead of five repeated correlated subqueries.
+
+This is the kind of question company asks
+    — they show you working but slow SQL and want you to identify the performance issue and fix it. 
+    The answer they're looking for is: "replace correlated subqueries with a JOIN + GROUP BY to avoid repeated table scans."
