@@ -1,0 +1,826 @@
+Tier 1: must do
+
+1. #176 Second Highest Salary
+2. #183 Customers Who Never Order (with LEFT JOIN and with NOT EXISTS)
+3. #181 Employees Earning More Than Their Managers (self-join)
+4. #182 Duplicate Emails (GROUP BY with HAVING)
+5. #196 Delete Duplicate Emails **
+6. #184 Department Highest Salary
+7. #185 Department Top Three Salaries (DENSE_RANK)
+8. #178 Rank Scores (DENSE_RANK)
+9. #180 Consecutive Numbers (LAG/LEAD)
+10. #197 Rising Temperature (date comparison)
+
+Tier 2: high value
+11. #177 Nth Highest Salary
+12. #570 Managers with at Least 5 Direct Reports
+13. #1907 Count Salary Categories (CASE with UNION)
+14. #1193 Monthly Transactions I (GROUP BY month with conditional sums)
+15. #550 Game Play Analysis IV (first-day logic)
+16. #1204 Last Person to Fit in the Bus (running total)
+Tier 3: if time allows
+17. #1164 Product Price at a Given Date
+18. #626 Exchange Seats
+19. #1321 Restaurant Growth (moving average with window frames)
+
+-----
+-----
+-----
+1. #176 Second Highest Salary
+Write a query to report the second highest distinct salary from the Employee table, 
+    which has columns id and salary. If there’s no second highest, return null.
+
+WITH emp_sal_rank AS (
+    SELECT *, DENSE_RANK() OVER(ORDER BY salary DESC) AS emp_rank
+    FROM Employee
+)
+SELECT * 
+FROM emp_sal_rank
+WHERE emp_rank=2;
+--
+The abkove solution return nothing if there is no 2nd highest salary 
+if we want null than use MAX()
+WITH emp_sal_rank AS (
+    SELECT *, DENSE_RANK() OVER(ORDER BY salary DESC) AS emp_rank
+    FROM Employee
+)
+SELECT MAX(salary) AS SecondHighestSalary
+FROM emp_sal_rank
+WHERE emp_rank=2;
+---
+So the rule of thumb: 
+if they ask for a single aggregate value, use MAX. 
+If they ask for the rows, use the window function and select the columns
+
+
+-----
+-----
+-----
+2. #183 Customers Who Never Order.
+
+
+**183. Customers Who Never Order**
+**Table: Customers**
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
++-------------+---------+
+id is the primary key for this table.
+Each row gives the ID and name of one customer.
+```
+
+**Table: Orders**
+```
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| id          | int  |
+| customerId  | int  |
++-------------+------+
+id is the primary key for this table.
+customerId is a foreign key referencing id in the Customers table.
+Each row gives the ID of one order and the ID of the customer who placed it.
+```
+
+Write a solution to find all customers who never placed any orders.
+Return the result table in any order. The output column must be named `Customers`.
+
+**Example 1:**
+
+```
+Input:
+Customers table:
++----+-------+
+| id | name  |
++----+-------+
+| 1  | Joe   |
+| 2  | Henry |
+| 3  | Sam   |
+| 4  | Max   |
++----+-------+
+Orders table:
++----+------------+
+| id | customerId |
++----+------------+
+| 1  | 3          |
+| 2  | 1          |
++----+------------+
+Output:
++-----------+
+| Customers |
++-----------+
+| Henry     |
+| Max       |
++-----------+
+```
+**Explanation:** Joe (id 1) and Sam (id 3) have orders. Henry (id 2) and Max (id 4) never ordered.
+
+--Solution-->
+SELECT c.name AS Customers
+FROM Customers c LEFT JOIN Orders o
+    ON c.id = o.customerId
+WHERE o.id IS NULL;
+
+SELECT c.name AS Customers
+FROM Customers c
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Orders o
+    WHERE c.id = o.customerId
+);
+Why not use NOT IN:
+    NOT IN returns nothing at all if customerId contains even one NULL. 
+    NOT EXISTS doesn’t have that problem.
+
+-----
+-----
+-----
+3. #1181. Employees Earning More Than Their Managers
+
+**Table: Employee**
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
+| salary      | int     |
+| managerId   | int     |
++-------------+---------+
+id is the primary key for this table.
+Each row gives the ID, name, and salary of an employee, plus the ID of their manager.
+managerId can be NULL for employees with no manager.
+```
+
+Write a solution to find the employees who earn more than their managers.
+Return the result table in any order. The output column must be named `Employee`.
+
+```
+Input:
+Employee table:
++----+-------+--------+-----------+
+| id | name  | salary | managerId |
++----+-------+--------+-----------+
+| 1  | Joe   | 70000  | 3         |
+| 2  | Henry | 80000  | 4         |
+| 3  | Sam   | 60000  | NULL      |
+| 4  | Max   | 90000  | NULL      |
++----+-------+--------+-----------+
+Output:
++----------+
+| Employee |
++----------+
+| Joe      |
++----------+
+```
+
+SELECT e.name AS Employee
+FROM Employee e JOIN Employee m
+    ON e.managerId = m.id
+WHERE e.salary > m.salary;
+
+-----
+-----
+-----
+4. #182. Duplicate Emails
+
+**Table: Person**
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| email       | varchar |
++-------------+---------+
+id is the primary key for this table.
+Each row gives a person's ID and email address.
+No email contains uppercase letters, and email is never NULL.
+```
+
+Write a solution to report all the duplicate emails.
+Return the result table in any order. The output column must be named `Email`.
+
+**Example 1:**
+```
+Input:
+Person table:
++----+---------+
+| id | email   |
++----+---------+
+| 1  | a@b.com |
+| 2  | c@d.com |
+| 3  | a@b.com |
++----+---------+
+Output:
++---------+
+| Email   |
++---------+
+| a@b.com |
++---------+
+```
+**Explanation:** a@b.com appears twice.
+
+--Solution-->
+
+SELECT email AS Email
+FROM Person
+GROUP BY email
+HAVING COUNT(*)>1;
+
+-----
+-----
+-----
+5. #196. Delete Duplicate Emails
+
+**Table: Person**
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| email       | varchar |
++-------------+---------+
+id is the primary key for this table.
+Each row gives a person's ID and email address.
+No email contains uppercase letters.
+```
+
+Write a solution to delete all duplicate emails, keeping only one row for each email: the one with the smallest `id`.
+This must be a `DELETE` statement, not a `SELECT`. The judge will look at the Person table after your statement runs, and the row order doesn't matter.
+
+**Example 1:**
+
+```
+Input:
+Person table:
++----+------------------+
+| id | email            |
++----+------------------+
+| 1  | john@example.com |
+| 2  | bob@example.com  |
+| 3  | john@example.com |
++----+------------------+
+
+Output (Person table after the delete):
++----+------------------+
+| id | email            |
++----+------------------+
+| 1  | john@example.com |
+| 2  | bob@example.com  |
++----+------------------+
+```
+
+**Explanation:** john@example.com appears twice. The row with id 1 stays because it has the smaller id.
+
+DELETE p1
+FROM Person p1 
+JOIN Person p2
+    ON p1.email = p2.email
+WHERE p1.id > p2.id;
+
+alternate version
+DELETE 
+FROM Person
+WHERE id NOT IN (
+        SELECT id FROM
+        (
+        SELECT MIN(id)
+        FROM Person
+        GROUP BY email
+    ) temp_alias
+);
+MySQL won’t let you select from the same table you’re deleting from 
+unless the subquery is materialized like this.
+
+-----
+-----
+-----
+6. #184 Department Highest Salary
+
+**Table: Employee**
+
+```
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| id           | int     |
+| name         | varchar |
+| salary       | int     |
+| departmentId | int     |
++--------------+---------+
+id is the primary key for this table.
+departmentId is a foreign key referencing id in the Department table.
+Each row gives an employee's ID, name, salary, and department.
+```
+
+**Table: Department**
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
++-------------+---------+
+id is the primary key for this table.
+Each row gives a department's ID and name. Names are never NULL.
+```
+
+Write a solution to find the employees who have the highest salary in each department.
+Return the result table in any order. The output columns must be `Department`, `Employee`, and `Salary`.
+
+**Example 1:**
+
+```
+Input:
+Employee table:
++----+-------+--------+--------------+
+| id | name  | salary | departmentId |
++----+-------+--------+--------------+
+| 1  | Joe   | 70000  | 1            |
+| 2  | Jim   | 90000  | 1            |
+| 3  | Henry | 80000  | 2            |
+| 4  | Sam   | 60000  | 2            |
+| 5  | Max   | 90000  | 1            |
++----+-------+--------+--------------+
+Department table:
++----+-------+
+| id | name  |
++----+-------+
+| 1  | IT    |
+| 2  | Sales |
++----+-------+
+Output:
++------------+----------+--------+
+| Department | Employee | Salary |
++------------+----------+--------+
+| IT         | Jim      | 90000  |
+| Sales      | Henry    | 80000  |
+| IT         | Max      | 90000  |
++------------+----------+--------+
+```
+--Solution-->
+WITH emp_dept AS (
+    SELECT e.name, d.name AS dname, e.salary,
+        DENSE_RANK() OVER(PARTITION BY d.id ORDER BY e.salary DESC) AS sal_rank
+    FROM Employee e JOIN Department d 
+        ON e.departmentId = d.id
+)
+SELECT dname AS Department, name AS Employee, salary AS Salary
+FROM emp_dept
+WHERE sal_rank=1;
+
+
+-----
+-----
+-----
+7. #185 Department Top Three Salaries (DENSE_RANK)
+
+**Table: Employee**
+```
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| id           | int     |
+| name         | varchar |
+| salary       | int     |
+| departmentId | int     |
++--------------+---------+
+id is the primary key for this table.
+departmentId is a foreign key referencing id in the Department table.
+Each row gives an employee's ID, name, salary, and department.
+```
+
+**Table: Department**
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
++-------------+---------+
+id is the primary key for this table.
+Each row gives a department's ID and name.
+```
+
+The company wants to find its high earners in each department. 
+    A high earner is an employee whose salary is among 
+        the **top three unique** salaries in their department.
+Write a solution to find the high earners in each department.
+
+Return the result table in any order. 
+The output columns must be `Department`, `Employee`, and `Salary`.
+
+**Example 1:**
+
+```
+Input:
+Employee table:
++----+-------+--------+--------------+
+| id | name  | salary | departmentId |
++----+-------+--------+--------------+
+| 1  | Joe   | 85000  | 1            |
+| 2  | Henry | 80000  | 2            |
+| 3  | Sam   | 60000  | 2            |
+| 4  | Max   | 90000  | 1            |
+| 5  | Janet | 69000  | 1            |
+| 6  | Randy | 85000  | 1            |
+| 7  | Will  | 70000  | 1            |
++----+-------+--------+--------------+
+
+Department table:
++----+-------+
+| id | name  |
++----+-------+
+| 1  | IT    |
+| 2  | Sales |
++----+-------+
+
+Output:
++------------+----------+--------+
+| Department | Employee | Salary |
++------------+----------+--------+
+| IT         | Max      | 90000  |
+| IT         | Joe      | 85000  |
+| IT         | Randy    | 85000  |
+| IT         | Will     | 70000  |
+| Sales      | Henry    | 80000  |
+| Sales      | Sam      | 60000  |
++------------+----------+--------+
+```
+--Solution-->
+WITH emp_dept AS (
+    SELECT e.name, d.name AS dname, e.salary,
+        DENSE_RANK() OVER(PARTITION BY d.id ORDER BY e.salary DESC) AS sal_rank
+    FROM Employee e JOIN Department d 
+        ON e.departmentId = d.id
+)
+SELECT dname AS Department, name AS Employee, salary AS Salary
+FROM emp_dept
+WHERE sal_rank<=3;
+
+∫-----
+-----
+-----
+8. #178 Rank Scores
+**Table: Scores**
+
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| score       | decimal |
++-------------+---------+
+id is the primary key for this table.
+Each row gives the score of a game. Scores are floating-point values with two decimal places.
+```
+
+Write a solution to rank the scores, using these rules:
+
+The scores are ranked from highest to lowest. 
+    Two equal scores get the same rank. 
+    After a tie, the next rank is the next consecutive integer, so there are no gaps between ranks.
+Return the result table ordered by `score` in descending order. 
+The output columns must be `score` and `rank`.
+
+**Example 1:**
+
+```
+Input:
+Scores table:
++----+-------+
+| id | score |
++----+-------+
+| 1  | 3.50  |
+| 2  | 3.65  |
+| 3  | 4.00  |
+| 4  | 3.85  |
+| 5  | 4.00  |
+| 6  | 3.65  |
++----+-------+
+
+Output:
++-------+------+
+| score | rank |
++-------+------+
+| 4.00  | 1    |
+| 4.00  | 1    |
+| 3.85  | 2    |
+| 3.65  | 3    |
+| 3.65  | 3    |
+| 3.50  | 4    |
++-------+------+
+```
+--Solution-->
+SELECT score, 
+    DENSE_RANK() OVER(ORDER BY score DESC) AS `rank`
+FROM Scores
+ORDER BY score DESC;
+
+-----
+-----
+-----
+9. #180 Consecutive Numbers 
+
+**Table: Logs**
+```
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| num         | varchar |
++-------------+---------+
+id is the primary key for this table and is an auto-increment column starting from 1.
+```
+
+Write a solution to find all numbers that appear at least three times in a row.
+Return the result table in any order. The output column must be named `ConsecutiveNums`.
+
+**Example 1:**
+```
+Input:
+Logs table:
++----+-----+
+| id | num |
++----+-----+
+| 1  | 1   |
+| 2  | 1   |
+| 3  | 1   |
+| 4  | 2   |
+| 5  | 1   |
+| 6  | 2   |
+| 7  | 2   |
++----+-----+
+Output:
++-----------------+
+| ConsecutiveNums |
++-----------------+
+| 1               |
++-----------------+
+```
+
+--Solution-->
+WITH logs_comparison AS (
+    SELECT id, num, 
+        LAG(num,1) OVER(ORDER BY id) AS next_num,
+        LAG(num,2) OVER(ORDER BY id) AS next_2_num
+    FROM Logs
+)
+SELECT DISTINCT num AS ConsecutiveNums
+FROM logs_comparison
+WHERE num = next_num AND num = next_2_num;
+
+
+-----
+-----
+-----
+10. #197 Rising Temperature (date comparison)
+
+**Table: Weather**
+```
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| recordDate    | date    |
+| temperature   | int     |
++---------------+---------+
+id is the primary key for this table.
+No two rows have the same recordDate.
+Each row gives the temperature on a certain day.
+```
+
+Write a solution to find the `id` of every date 
+    whose temperature was higher than the temperature on the day before it.
+Return the result table in any order. The output column must be named `id`.
+
+**Example 1:**
+```
+Input:
+Weather table:
++----+------------+-------------+
+| id | recordDate | temperature |
++----+------------+-------------+
+| 1  | 2015-01-01 | 10          |
+| 2  | 2015-01-02 | 25          |
+| 3  | 2015-01-03 | 20          |
+| 4  | 2015-01-04 | 30          |
++----+------------+-------------+
+Output:
++----+
+| id |
++----+
+| 2  |
+| 4  |
++----+
+```
+WITH prev_day_weather AS (
+    SELECT id, recordDate, temperature,
+        LAG(recordDate, 1) OVER(ORDER BY recordDate) AS prev_date, 
+        LAG(temperature, 1) OVER(ORDER BY recordDate) AS prev_temperature
+    FROM Weather
+)
+SELECT id
+FROM prev_day_weather
+WHERE DATEDIFF(recordDate, prev_date) = 1 AND temperature > prev_temperature;
+
+-----
+-----
+-----
+11. #177 Nth Highest Salary
+
+Table: Employee
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| id          | int  |
+| salary      | int  |
++-------------+------+
+id is the primary key (column with unique values) for this table.
+Each row of this table contains information about the salary of an employee.
+ 
+
+Write a solution to find the nth highest distinct salary from the Employee table. 
+If there are less than n distinct salaries, return null.
+
+The result format is in the following example.
+
+ 
+
+Example 1:
+
+Input: 
+Employee table:
++----+--------+
+| id | salary |
++----+--------+
+| 1  | 100    |
+| 2  | 200    |
+| 3  | 300    |
++----+--------+
+n = 2
+Output: 
++------------------------+
+| getNthHighestSalary(2) |
++------------------------+
+| 200                    |
++------------------------+
+Example 2:
+
+Input: 
+Employee table:
++----+--------+
+| id | salary |
++----+--------+
+| 1  | 100    |
++----+--------+
+n = 2
+Output: 
++------------------------+
+| getNthHighestSalary(2) |
++------------------------+
+| null                   |
++------------------------+
+
+-- Solutoin 1: using group by and row_number()
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  RETURN (
+      # Write your MySQL query statement below.
+        WITH emp_sal_rank AS (
+            SELECT salary, 
+                ROW_NUMBER() OVER(ORDER BY salary DESC) AS sal_rnk 
+            FROM Employee
+            GROUP BY salary
+        )
+        SELECT salary
+        FROM emp_sal_rank
+        WHERE sal_rnk = N
+  );
+END
+
+-- Solution 2: Using dense_rank()
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+    RETURN (
+        WITH emp_salary_rank AS (
+            SELECT salary,
+                DENSE_RANK() OVER(ORDER BY salary DESC) AS sal_rnk
+            FROM Employee
+        )
+        SELECT salary
+        FROM emp_salary_rank
+        WHERE sal_rnk=N
+        LIMIT 1
+    );
+END
+
+
+-- Solution 3: Using limit and Offset
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+    SET N = N-1;
+    RETURN(
+        SELECT DISTINCT salary
+        FROM Employee
+        ORDER BY salary DESC
+        LIMIT 1 OFFSET N
+    );
+END
+
++---------------------------+------------------+------------------+--------------------+
+|                           | Time (no index)  | Time (index)     | Best when          |
++---------------------------+------------------+------------------+--------------------+
+| Sol 1: GROUP BY +         | O(n + d log d)   | O(n + d log d)   | many duplicates    |
+|        ROW_NUMBER         |                  |                  |                    |
++---------------------------+------------------+------------------+--------------------+
+| Sol 2: DENSE_RANK         | O(n log n)       | O(n log n)       | readability,       |
+|        on all rows        |                  |                  | PARTITION BY       |
++---------------------------+------------------+------------------+--------------------+
+| Sol 3: DISTINCT +         | O(n + d log d)   | ~O(N)            | salary is indexed  |
+|        LIMIT/OFFSET       |                  | stops early      |                    |
++---------------------------+------------------+------------------+--------------------+
+
+n = total rows    d = distinct salaries    N = rank wanted
+
+-----
+-----
+-----
+12. #570 Managers with at Least 5 Direct Reports
+Table: Employee
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
+| department  | varchar |
+| managerId   | int     |
++-------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table indicates the name of an employee, their department, and the id of their manager.
+If managerId is null, then the employee does not have a manager.
+No employee will be the manager of themself.
+ 
+
+Write a solution to find managers with at least five direct reports.
+Return the result table in any order.
+
+The result format is in the following example.
+Example 1:
+Input: 
+Employee table:
++-----+-------+------------+-----------+
+| id  | name  | department | managerId |
++-----+-------+------------+-----------+
+| 101 | John  | A          | null      |
+| 102 | Dan   | A          | 101       |
+| 103 | James | A          | 101       |
+| 104 | Amy   | A          | 101       |
+| 105 | Anne  | A          | 101       |
+| 106 | Ron   | B          | 101       |
++-----+-------+------------+-----------+
+Output: 
++------+
+| name |
++------+
+| John |
++------+
+
+-- Solution 1: Aggregating and joining
+WITH manager AS (
+    SELECT managerId 
+    FROM Employee
+    WHERE managerId IS NOT NULL
+    GROUP BY managerId
+    HAVING COUNT(id) >= 5
+)
+SELECT e.name
+FROM Employee e JOIN manager m
+    ON e.id = m.managerId
+
+-- Solution 2: using in and aggregating
+SELECT name
+FROM Employee
+WHERE id IN (
+    SELECT managerId
+    FROM Employee
+    GROUP BY managerId
+    HAVING COUNT(id) >= 5
+)
+
+Both perform the same, since the optimizer usually turns IN into a semi-join. 
+I’d use:
+    JOIN if I also wanted to show the report count, 
+    IN if I’m only filtering.
+-----
+-----
+-----
+
+
+-----
+-----
+-----
